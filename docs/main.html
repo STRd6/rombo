@@ -41,20 +41,17 @@ ByteArray = require <span class="string">"byte_array"</span>
 Canvas = require <span class="string">"touch-canvas"</span>
 FileReading = require(<span class="string">"./lib/file_reading"</span>)
 Modal = require(<span class="string">"./lib/modal"</span>)
+RomReader = require <span class="string">"./rom_reader"</span>
 
 view = <span class="literal">null</span>
-
-bankSize = <span class="number">1024</span> * <span class="number">30</span> <span class="comment"># 32kb</span>
 
 $ -&gt;
   Modal.show FileReading.binaryReaderInput
     success: (buffer) -&gt;
-      global.view = view = <span class="keyword">new</span> Uint8Array(buffer)
+      <span class="comment"># Currently return only 1st bank</span>
+      global.view = view = RomReader(buffer)
 
-      console.log view.length
-
-      section = view.subarray(<span class="number">0</span>, bankSize)
-      text = Array::map.call section, (value) -&gt;
+      text = Array::map.call view, (value) -&gt;
         <span class="string">"0<span class="subst">#{value.toString(<span class="number">16</span>)}</span>"</span>.slice(-<span class="number">2</span>)
       .join(<span class="string">" "</span>)
 

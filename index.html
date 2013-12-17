@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="manifest.appcache?1387295664878">
+<html manifest="manifest.appcache?1387298537438">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -193,7 +193,7 @@ require('./main')
     "main.coffee.md": {
       "path": "main.coffee.md",
       "mode": "100644",
-      "content": "Rombo\n=====\n\nExplore binary data.\n\n    require \"./setup\"\n\n    ByteArray = require \"byte_array\"\n    Canvas = require \"touch-canvas\"\n    FileReading = require(\"./lib/file_reading\")\n    Modal = require(\"./lib/modal\")\n\n    view = null\n\n    bankSize = 1024 * 30 # 32kb\n\n    $ ->\n      Modal.show FileReading.binaryReaderInput\n        success: (buffer) ->\n          global.view = view = new Uint8Array(buffer)\n\n          console.log view.length\n\n          section = view.subarray(0, bankSize)\n          text = Array::map.call section, (value) ->\n            \"0#{value.toString(16)}\".slice(-2)\n          .join(\" \")\n\n          hex.text text\n\n        error: (evt) ->\n          console.log evt\n        complete: ->\n          Modal.hide()\n\n    canvas = Canvas\n      width: 640\n      height: 480\n\n    canvas.fill \"red\"\n\n    # $(\"body\").append canvas.element()\n    \n    hex = $ \"<pre>\"\n\n    $(\"body\").append hex\n",
+      "content": "Rombo\n=====\n\nExplore binary data.\n\n    require \"./setup\"\n\n    ByteArray = require \"byte_array\"\n    Canvas = require \"touch-canvas\"\n    FileReading = require(\"./lib/file_reading\")\n    Modal = require(\"./lib/modal\")\n    RomReader = require \"./rom_reader\"\n\n    view = null\n\n    $ ->\n      Modal.show FileReading.binaryReaderInput\n        success: (buffer) ->\n          # Currently return only 1st bank\n          global.view = view = RomReader(buffer)\n\n          text = Array::map.call view, (value) ->\n            \"0#{value.toString(16)}\".slice(-2)\n          .join(\" \")\n\n          hex.text text\n\n        error: (evt) ->\n          console.log evt\n        complete: ->\n          Modal.hide()\n\n    canvas = Canvas\n      width: 640\n      height: 480\n\n    canvas.fill \"red\"\n\n    # $(\"body\").append canvas.element()\n    \n    hex = $ \"<pre>\"\n\n    $(\"body\").append hex\n",
       "type": "blob"
     },
     "pixie.cson": {
@@ -213,6 +213,12 @@ require('./main')
       "mode": "100644",
       "content": "html\n  height: 100%\n\nbody\n  height: 100%\n  margin: 0\n\npre\n  width: 100%\n  height: 100%\n  margin: 0\n  white-space: pre-wrap\n\n#modal\n  background-color: rgba(0, 0, 0, 0.25)\n  display: none\n  position: absolute\n  z-index: 9000\n  top: 0\n\n  input[type=file]\n    box-sizing: border-box\n    padding: 5em 2em\n    width: 320px\n    height: 180px\n\n  & > *\n    background-color: white\n    border: 1px solid black\n    margin: auto\n    position: absolute\n    top: 0\n    bottom: 0\n    left: 0\n    right: 0\n\n  &.active\n    display: block\n    width: 100%\n    height: 100%\n",
       "type": "blob"
+    },
+    "rom_reader.coffee.md": {
+      "path": "rom_reader.coffee.md",
+      "mode": "100644",
+      "content": "Rom Reader\n==========\n\nRead rom data by byte.\n\n    # TODO: Handle both HiROM and LoROM\n    bankSize = 1024 * 30 # 32kb\n\nStrip extra headers.\n\n    module.exports = (buffer) ->\n\n      view = new Uint8Array(buffer)\n\n      remainder = view.length % 1024\n\n      if remainder is 512\n        return view.subarray(512, bankSize + 512)\n      else if remainder is 0\n        return view.subarray(0, bankSize)\n      else\n        throw \"Invalid ROM length\"\n",
+      "type": "blob"
     }
   },
   "distribution": {
@@ -228,7 +234,7 @@ require('./main')
     },
     "main": {
       "path": "main",
-      "content": "(function() {\n  var ByteArray, Canvas, FileReading, Modal, bankSize, canvas, hex, view;\n\n  require(\"./setup\");\n\n  ByteArray = require(\"byte_array\");\n\n  Canvas = require(\"touch-canvas\");\n\n  FileReading = require(\"./lib/file_reading\");\n\n  Modal = require(\"./lib/modal\");\n\n  view = null;\n\n  bankSize = 1024 * 30;\n\n  $(function() {\n    return Modal.show(FileReading.binaryReaderInput({\n      success: function(buffer) {\n        var section, text;\n        global.view = view = new Uint8Array(buffer);\n        console.log(view.length);\n        section = view.subarray(0, bankSize);\n        text = Array.prototype.map.call(section, function(value) {\n          return (\"0\" + (value.toString(16))).slice(-2);\n        }).join(\" \");\n        return hex.text(text);\n      },\n      error: function(evt) {\n        return console.log(evt);\n      },\n      complete: function() {\n        return Modal.hide();\n      }\n    }));\n  });\n\n  canvas = Canvas({\n    width: 640,\n    height: 480\n  });\n\n  canvas.fill(\"red\");\n\n  hex = $(\"<pre>\");\n\n  $(\"body\").append(hex);\n\n}).call(this);\n\n//# sourceURL=main.coffee",
+      "content": "(function() {\n  var ByteArray, Canvas, FileReading, Modal, RomReader, canvas, hex, view;\n\n  require(\"./setup\");\n\n  ByteArray = require(\"byte_array\");\n\n  Canvas = require(\"touch-canvas\");\n\n  FileReading = require(\"./lib/file_reading\");\n\n  Modal = require(\"./lib/modal\");\n\n  RomReader = require(\"./rom_reader\");\n\n  view = null;\n\n  $(function() {\n    return Modal.show(FileReading.binaryReaderInput({\n      success: function(buffer) {\n        var text;\n        global.view = view = RomReader(buffer);\n        text = Array.prototype.map.call(view, function(value) {\n          return (\"0\" + (value.toString(16))).slice(-2);\n        }).join(\" \");\n        return hex.text(text);\n      },\n      error: function(evt) {\n        return console.log(evt);\n      },\n      complete: function() {\n        return Modal.hide();\n      }\n    }));\n  });\n\n  canvas = Canvas({\n    width: 640,\n    height: 480\n  });\n\n  canvas.fill(\"red\");\n\n  hex = $(\"<pre>\");\n\n  $(\"body\").append(hex);\n\n}).call(this);\n\n//# sourceURL=main.coffee",
       "type": "blob"
     },
     "pixie": {
@@ -244,6 +250,11 @@ require('./main')
     "style": {
       "path": "style",
       "content": "module.exports = \"html {\\n  height: 100%;\\n}\\n\\nbody {\\n  height: 100%;\\n  margin: 0;\\n}\\n\\npre {\\n  width: 100%;\\n  height: 100%;\\n  margin: 0;\\n  white-space: pre-wrap;\\n}\\n\\n#modal {\\n  background-color: rgba(0, 0, 0, 0.25);\\n  display: none;\\n  position: absolute;\\n  z-index: 9000;\\n  top: 0;\\n}\\n\\n#modal input[type=file] {\\n  padding: 5em 2em;\\n  width: 320px;\\n  height: 180px;\\n  -ms-box-sizing: border-box;\\n  -moz-box-sizing: border-box;\\n  -webkit-box-sizing: border-box;\\n  box-sizing: border-box;\\n}\\n\\n#modal > * {\\n  background-color: white;\\n  border: 1px solid black;\\n  margin: auto;\\n  position: absolute;\\n  top: 0;\\n  bottom: 0;\\n  left: 0;\\n  right: 0;\\n}\\n\\n#modal.active {\\n  display: block;\\n  width: 100%;\\n  height: 100%;\\n}\";",
+      "type": "blob"
+    },
+    "rom_reader": {
+      "path": "rom_reader",
+      "content": "(function() {\n  var bankSize;\n\n  bankSize = 1024 * 30;\n\n  module.exports = function(buffer) {\n    var remainder, view;\n    view = new Uint8Array(buffer);\n    remainder = view.length % 1024;\n    if (remainder === 512) {\n      return view.subarray(512, bankSize + 512);\n    } else if (remainder === 0) {\n      return view.subarray(0, bankSize);\n    } else {\n      throw \"Invalid ROM length\";\n    }\n  };\n\n}).call(this);\n\n//# sourceURL=rom_reader.coffee",
       "type": "blob"
     }
   },
