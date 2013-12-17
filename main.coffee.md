@@ -9,20 +9,17 @@ Explore binary data.
     Canvas = require "touch-canvas"
     FileReading = require("./lib/file_reading")
     Modal = require("./lib/modal")
+    RomReader = require "./rom_reader"
 
     view = null
-
-    bankSize = 1024 * 30 # 32kb
 
     $ ->
       Modal.show FileReading.binaryReaderInput
         success: (buffer) ->
-          global.view = view = new Uint8Array(buffer)
+          # Currently return only 1st bank
+          global.view = view = RomReader(buffer)
 
-          console.log view.length
-
-          section = view.subarray(0, bankSize)
-          text = Array::map.call section, (value) ->
+          text = Array::map.call view, (value) ->
             "0#{value.toString(16)}".slice(-2)
           .join(" ")
 
