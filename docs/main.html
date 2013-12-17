@@ -38,17 +38,44 @@
             <div class="content"><pre><code class="lang-coffeescript">require <span class="string">"./setup"</span>
 
 ByteArray = require <span class="string">"byte_array"</span>
+Canvas = require <span class="string">"touch-canvas"</span>
 FileReading = require(<span class="string">"./lib/file_reading"</span>)
 Modal = require(<span class="string">"./lib/modal"</span>)
 
+view = <span class="literal">null</span>
+
+bankSize = <span class="number">1024</span> * <span class="number">30</span> <span class="comment"># 32kb</span>
+
 $ -&gt;
   Modal.show FileReading.binaryReaderInput
-    success: (arrayBuffer) -&gt;
-      console.log arrayBuffer
+    success: (buffer) -&gt;
+      global.view = view = <span class="keyword">new</span> Uint8Array(buffer)
+
+      console.log view.length
+
+      section = view.subarray(<span class="number">0</span>, bankSize)
+      text = Array::map.call section, (value) -&gt;
+        <span class="string">"0<span class="subst">#{value.toString(<span class="number">16</span>)}</span>"</span>.slice(-<span class="number">2</span>)
+      .join(<span class="string">" "</span>)
+
+      hex.text text
+
     error: (evt) -&gt;
       console.log evt
     complete: -&gt;
-      Modal.hide()</code></pre>
+      Modal.hide()
+
+canvas = Canvas
+  width: <span class="number">640</span>
+  height: <span class="number">480</span>
+
+canvas.fill <span class="string">"red"</span>
+
+<span class="comment"># $("body").append canvas.element()</span>
+
+hex = $ <span class="string">"&lt;pre&gt;"</span>
+
+$(<span class="string">"body"</span>).append hex</code></pre>
 </div>
         </li>
         
