@@ -8,3 +8,4 @@ dependencies:
   appcache: "distri/appcache:v0.2.0"
   byte_array: "distri/byte_array:v0.1.1"
   runtime: "STRd6/runtime:v0.2.0"
+  touch-canvas: "distri/touch-canvas:v0.3.0"
