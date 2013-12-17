@@ -15,8 +15,11 @@ Strip extra headers.
       remainder = view.length % 1024
 
       if remainder is 512
-        return view.subarray(512, bankSize + 512)
+        rom = view.subarray(512)
       else if remainder is 0
-        return view.subarray(0, bankSize)
+        rom = view.subarray(0)
       else
         throw "Invalid ROM length"
+
+      bank: (n) ->
+        rom.subarray(bankSize * n, bankSize * (n + 1))

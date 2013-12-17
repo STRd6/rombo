@@ -17,7 +17,7 @@ Explore binary data.
       Modal.show FileReading.binaryReaderInput
         success: (buffer) ->
           # Currently return only 1st bank
-          global.view = view = RomReader(buffer)
+          global.view = view = RomReader(buffer).bank(0)
 
           text = Array::map.call view, (value) ->
             "0#{value.toString(16)}".slice(-2)
