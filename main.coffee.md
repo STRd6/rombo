@@ -10,11 +10,24 @@ Explore binary data.
     FileReading = require("./lib/file_reading")
     Modal = require("./lib/modal")
 
+    view = null
+
+    bankSize = 1024 * 30 # 32kb
+
     $ ->
       Modal.show FileReading.binaryReaderInput
         success: (buffer) ->
-          view = new Uint8Array(buffer)
-          
+          global.view = view = new Uint8Array(buffer)
+
+          console.log view.length
+
+          section = view.subarray(0, bankSize)
+          text = Array::map.call section, (value) ->
+            "0#{value.toString(16)}".slice(-2)
+          .join(" ")
+
+          hex.text text
+
         error: (evt) ->
           console.log evt
         complete: ->
@@ -26,6 +39,8 @@ Explore binary data.
 
     canvas.fill "red"
 
-    $("body").append canvas.element()
+    # $("body").append canvas.element()
+    
+    hex = $ "<pre>"
 
-    # $("body").append $ "<textarea>"
+    $("body").append hex
