@@ -49,7 +49,7 @@ $ -&gt;
   Modal.show FileReading.binaryReaderInput
     success: (buffer) -&gt;
       <span class="comment"># Currently return only 1st bank</span>
-      global.view = view = RomReader(buffer)
+      global.view = view = RomReader(buffer).bank(<span class="number">0</span>)
 
       text = Array::map.call view, (value) -&gt;
         <span class="string">"0<span class="subst">#{value.toString(<span class="number">16</span>)}</span>"</span>.slice(-<span class="number">2</span>)
