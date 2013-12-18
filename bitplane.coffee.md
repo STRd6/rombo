@@ -10,7 +10,7 @@ http://mrclick.zophar.net/TilEd/download/consolegfx.txt
 
     modes =
       # 16 bytes of source -> 64 bytes of dest
-      # TODO: Untested
+      # TODO: Test and debug all these
       "2BPP NES": (source, dest) ->
         [0...2].forEach (depth) ->
           [0...8].forEach (n) ->
@@ -28,9 +28,9 @@ http://mrclick.zophar.net/TilEd/download/consolegfx.txt
       "3BPP SNES": -> # TODO
 
       # 32 bytes source -> 64 bytes dest
-      "4BPP SNES": (source, dest) ->
-        [0...2].forEach (shift) ->
-          modes["2BPP SNES"](source.subarray(shift * 16, (shift + 1) * 16), dest, shift * 2)
+      "4BPP SNES": (source, dest, shift) ->
+        [0...2].forEach (depth) ->
+          modes["2BPP SNES"](source.subarray(depth * 16, (depth + 1) * 16), dest, depth * 2 + shift)
 
       # 64 bytes source -> 64 bytes dest
       "8BPP SNES": (source, dest) ->
@@ -40,7 +40,6 @@ http://mrclick.zophar.net/TilEd/download/consolegfx.txt
     module.exports = 
       toPaletteIndices: (view, mode="8BPP SNES") ->
         # TODO: Create correct output buffer based on mode and input size
-        # Currently assuming 8BPP
 
         chunkSize = 64
         outputChunkSize = 64
@@ -54,7 +53,7 @@ http://mrclick.zophar.net/TilEd/download/consolegfx.txt
         if (view.length % chunkSize) != 0
           throw "Invalid buffer length, must be a multiple of #{chunkSize}"
 
-        [0...(view.legth / chunkSize)].forEach (slice) ->
+        [0...(view.length / chunkSize)].forEach (slice) ->
           source = view.subarray(slice * chunkSize, (slice + 1) * chunkSize)
           destination = output.subarray(slice * outputChunkSize, (slice + 1) * outputChunkSize)
           modes[mode](source, destination)

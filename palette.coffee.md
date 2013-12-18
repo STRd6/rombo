@@ -3,30 +3,43 @@ Palette
 
 Some test palettes.
 
-    default4Color = """
-      20 12 28
-      89 125 206
-      109 170 44
-      222 238 214
-    """
+    makePalette = (text) ->
+      text.split("\n").map (row) ->
+        row.split(" ").map (n) ->
+          parseInt(n, 10).concat 0xff
 
-    defaultPalette = """
-      20 12 28
-      68 36 52
-      48 52 109
-      78 74 78
-      133 76 48
-      52 101 36
-      208 70 72
-      117 113 97
-      89 125 206
-      210 125 44
-      133 149 161
-      109 170 44
-      210 170 153
-      109 194 202
-      218 212 94
-      222 238 214
-    """.split("\n").map (row) ->
-      row.split(" ").map (n) ->
-        parseInt(n, 10).concat 0xff
+    numberToHex = (n) ->
+      "0#{n.toString(0x10)}".slice(-2).toUpperCase()
+
+    makeHexColors = (lines) ->
+      lines.split("\n").map (line) ->
+        "#" + line.split(" ").map (string) ->
+          numberToHex parseInt(string, 10)
+        .join("")
+
+    module.exports =
+      default4Color: makeHexColors """
+        20 12 28
+        89 125 206
+        109 170 44
+        222 238 214
+      """
+  
+      defaultPalette: makeHexColors """
+        20 12 28
+        68 36 52
+        48 52 109
+        78 74 78
+        133 76 48
+        52 101 36
+        208 70 72
+        117 113 97
+        89 125 206
+        210 125 44
+        133 149 161
+        109 170 44
+        210 170 153
+        109 194 202
+        218 212 94
+        222 238 214
+      """
