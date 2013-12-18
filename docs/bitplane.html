@@ -41,7 +41,7 @@
 
 modes =
   <span class="comment"># 16 bytes of source -&gt; 64 bytes of dest</span>
-  <span class="comment"># TODO: Untested</span>
+  <span class="comment"># TODO: Test and debug all these</span>
   <span class="string">"2BPP NES"</span>: (source, dest) -&gt;
     [<span class="number">0.</span>.<span class="number">.2</span>].forEach (depth) -&gt;
       [<span class="number">0.</span>.<span class="number">.8</span>].forEach (n) -&gt;
@@ -59,9 +59,9 @@ modes =
   <span class="string">"3BPP SNES"</span>: -&gt; <span class="comment"># TODO</span>
 
   <span class="comment"># 32 bytes source -&gt; 64 bytes dest</span>
-  <span class="string">"4BPP SNES"</span>: (source, dest) -&gt;
-    [<span class="number">0.</span>.<span class="number">.2</span>].forEach (shift) -&gt;
-      modes[<span class="string">"2BPP SNES"</span>](source.subarray(shift * <span class="number">16</span>, (shift + <span class="number">1</span>) * <span class="number">16</span>), dest, shift * <span class="number">2</span>)
+  <span class="string">"4BPP SNES"</span>: (source, dest, shift) -&gt;
+    [<span class="number">0.</span>.<span class="number">.2</span>].forEach (depth) -&gt;
+      modes[<span class="string">"2BPP SNES"</span>](source.subarray(depth * <span class="number">16</span>, (depth + <span class="number">1</span>) * <span class="number">16</span>), dest, depth * <span class="number">2</span> + shift)
 
   <span class="comment"># 64 bytes source -&gt; 64 bytes dest</span>
   <span class="string">"8BPP SNES"</span>: (source, dest) -&gt;
@@ -71,7 +71,6 @@ modes =
 module.exports = 
   toPaletteIndices: (view, mode=<span class="string">"8BPP SNES"</span>) -&gt;
     <span class="comment"># TODO: Create correct output buffer based on mode and input size</span>
-    <span class="comment"># Currently assuming 8BPP</span>
 
     chunkSize = <span class="number">64</span>
     outputChunkSize = <span class="number">64</span>
@@ -85,7 +84,7 @@ module.exports =
     <span class="keyword">if</span> (view.length % chunkSize) != <span class="number">0</span>
       <span class="keyword">throw</span> <span class="string">"Invalid buffer length, must be a multiple of <span class="subst">#{chunkSize}</span>"</span>
 
-    [<span class="number">0.</span>..(view.legth / chunkSize)].forEach (slice) -&gt;
+    [<span class="number">0.</span>..(view.length / chunkSize)].forEach (slice) -&gt;
       source = view.subarray(slice * chunkSize, (slice + <span class="number">1</span>) * chunkSize)
       destination = output.subarray(slice * outputChunkSize, (slice + <span class="number">1</span>) * outputChunkSize)
       modes[mode](source, destination)

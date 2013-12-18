@@ -42,21 +42,51 @@ ByteArray = require <span class="string">"byte_array"</span>
 Canvas = require <span class="string">"touch-canvas"</span>
 FileReading = require(<span class="string">"./lib/file_reading"</span>)
 Modal = require(<span class="string">"./lib/modal"</span>)
+Palette = require <span class="string">"./palette"</span>
 RomReader = require <span class="string">"./rom_reader"</span>
 
+palette = Palette.defaultPalette
+
+console.log palette
+
 view = <span class="literal">null</span>
+
+<span class="function"><span class="title">toHex</span></span> = (view) -&gt;
+  text = Array::map.call view, (value) -&gt;
+    <span class="string">"0<span class="subst">#{value.toString(<span class="number">16</span>)}</span>"</span>.slice(-<span class="number">2</span>)
+  .join(<span class="string">" "</span>)
+
+  hex.text text
+
+<span class="function"><span class="title">toCanvas</span></span> = (view, palette) -&gt;
+  chunkSize = <span class="number">64</span>
+  pixelSize = <span class="number">8</span>
+
+  [<span class="number">0.</span>..(view.length / chunkSize)].forEach (chunk) -&gt;
+    console.log <span class="string">"drawing chunk <span class="subst">#{chunk}</span>"</span>
+    [<span class="number">0.</span>.<span class="number">.8</span>].forEach (row) -&gt;
+      [<span class="number">0.</span>.<span class="number">.8</span>].forEach (col) -&gt;
+        index = view[chunk * chunkSize + row * <span class="number">8</span> + col]
+        <span class="keyword">if</span> index &gt; <span class="number">16</span>
+          <span class="keyword">debugger</span>
+
+        x = chunkSize * (chunk % <span class="number">10</span>)
+        y = chunkSize * (chunk / <span class="number">10</span>).floor()
+
+        canvas.drawRect
+          x: x + col * <span class="number">8</span>
+          y: y + row * <span class="number">8</span>
+          width: pixelSize
+          height: pixelSize
+          color: palette[index]
 
 $ -&gt;
   Modal.show FileReading.binaryReaderInput
     success: (buffer) -&gt;
       <span class="comment"># Currently return only 1st bank</span>
-      global.view = view = RomReader(buffer).bank(<span class="number">0</span>)
+      global.view = view = Bitplane.toPaletteIndices(RomReader(buffer).bank(<span class="number">0</span>))
 
-      text = Array::map.call view, (value) -&gt;
-        <span class="string">"0<span class="subst">#{value.toString(<span class="number">16</span>)}</span>"</span>.slice(-<span class="number">2</span>)
-      .join(<span class="string">" "</span>)
-
-      hex.text text
+      toCanvas(view, palette)
 
     error: (evt) -&gt;
       console.log evt
@@ -65,13 +95,14 @@ $ -&gt;
 
 canvas = Canvas
   width: <span class="number">640</span>
-  height: <span class="number">480</span>
+  height: <span class="number">640</span>
 
-canvas.fill <span class="string">"red"</span>
+canvas.fill <span class="string">"black"</span>
 
 hex = $ <span class="string">"&lt;pre&gt;"</span>
+<span class="comment">#$("body").append hex</span>
 
-$(<span class="string">"body"</span>).append hex</code></pre>
+$(<span class="string">"body"</span>).append canvas.element()</code></pre>
 </div>
         </li>
         
