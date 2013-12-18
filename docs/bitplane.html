@@ -69,10 +69,10 @@ modes =
       modes[<span class="string">"4BPP SNES"</span>](source.subarray(shift * <span class="number">32</span>, (shift + <span class="number">1</span>) * <span class="number">32</span>), dest, shift * <span class="number">4</span>)
 
 module.exports = 
-  toPaletteIndices: (view, mode=<span class="string">"8BPP SNES"</span>) -&gt;
+  toPaletteIndices: (view, mode=<span class="string">"2BPP SNES"</span>) -&gt;
     <span class="comment"># TODO: Create correct output buffer based on mode and input size</span>
 
-    chunkSize = <span class="number">64</span>
+    chunkSize = <span class="number">16</span>
     outputChunkSize = <span class="number">64</span>
     ratio = outputChunkSize / chunkSize
 
