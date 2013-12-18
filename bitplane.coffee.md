@@ -38,10 +38,10 @@ http://mrclick.zophar.net/TilEd/download/consolegfx.txt
           modes["4BPP SNES"](source.subarray(shift * 32, (shift + 1) * 32), dest, shift * 4)
 
     module.exports = 
-      toPaletteIndices: (view, mode="8BPP SNES") ->
+      toPaletteIndices: (view, mode="2BPP SNES") ->
         # TODO: Create correct output buffer based on mode and input size
 
-        chunkSize = 64
+        chunkSize = 16
         outputChunkSize = 64
         ratio = outputChunkSize / chunkSize
 

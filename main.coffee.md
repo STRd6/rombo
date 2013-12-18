@@ -13,7 +13,7 @@ Explore binary data.
     Palette = require "./palette"
     RomReader = require "./rom_reader"
     
-    palette = Palette.defaultPalette
+    palette = Palette.default4Color#Palette
     
     console.log palette
 
@@ -27,23 +27,21 @@ Explore binary data.
       hex.text text
 
     toCanvas = (view, palette) ->
-      chunkSize = 64
-      pixelSize = 8
+      pixelSize = 4
+      chunkSize = pixelSize * 8
 
       [0...(view.length / chunkSize)].forEach (chunk) ->
         console.log "drawing chunk #{chunk}"
         [0...8].forEach (row) ->
           [0...8].forEach (col) ->
             index = view[chunk * chunkSize + row * 8 + col]
-            if index > 16
-              debugger
 
             x = chunkSize * (chunk % 10)
             y = chunkSize * (chunk / 10).floor()
 
             canvas.drawRect
-              x: x + col * 8
-              y: y + row * 8
+              x: x + col * pixelSize
+              y: y + row * pixelSize
               width: pixelSize
               height: pixelSize
               color: palette[index]
