@@ -5,6 +5,7 @@ Explore binary data.
 
     require "./setup"
 
+    Bitplane = require "./bitplane"
     ByteArray = require "byte_array"
     Canvas = require "touch-canvas"
     FileReading = require("./lib/file_reading")
@@ -35,8 +36,6 @@ Explore binary data.
       height: 480
 
     canvas.fill "red"
-
-    # $("body").append canvas.element()
     
     hex = $ "<pre>"
 

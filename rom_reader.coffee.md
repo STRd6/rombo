@@ -9,7 +9,6 @@ Read rom data by byte.
 Strip extra headers.
 
     module.exports = (buffer) ->
-
       view = new Uint8Array(buffer)
 
       remainder = view.length % 1024
@@ -23,3 +22,5 @@ Strip extra headers.
 
       bank: (n) ->
         rom.subarray(bankSize * n, bankSize * (n + 1))
+      
+      
