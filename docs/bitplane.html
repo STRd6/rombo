@@ -50,6 +50,7 @@ modes =
 
   <span class="comment"># 16 bytes of source -&gt; 64 bytes of dest</span>
   <span class="string">"2BPP SNES"</span>: (source, dest, shift=<span class="number">0</span>) -&gt;
+    console.log shift
     [<span class="number">0.</span>.<span class="number">.8</span>].forEach (row) -&gt;
       [<span class="number">0.</span>.<span class="number">.2</span>].forEach (depth) -&gt;
         masks.forEach (mask, i) -&gt;
@@ -59,7 +60,7 @@ modes =
   <span class="string">"3BPP SNES"</span>: -&gt; <span class="comment"># TODO</span>
 
   <span class="comment"># 32 bytes source -&gt; 64 bytes dest</span>
-  <span class="string">"4BPP SNES"</span>: (source, dest, shift) -&gt;
+  <span class="string">"4BPP SNES"</span>: (source, dest, shift=<span class="number">0</span>) -&gt;
     [<span class="number">0.</span>.<span class="number">.2</span>].forEach (depth) -&gt;
       modes[<span class="string">"2BPP SNES"</span>](source.subarray(depth * <span class="number">16</span>, (depth + <span class="number">1</span>) * <span class="number">16</span>), dest, depth * <span class="number">2</span> + shift)
 
@@ -72,7 +73,7 @@ module.exports =
   toPaletteIndices: (view, mode=<span class="string">"2BPP SNES"</span>) -&gt;
     <span class="comment"># TODO: Create correct output buffer based on mode and input size</span>
 
-    chunkSize = <span class="number">16</span>
+    chunkSize = parseInt(mode[<span class="number">0</span>]) * <span class="number">8</span>
     outputChunkSize = <span class="number">64</span>
     ratio = outputChunkSize / chunkSize
 

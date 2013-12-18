@@ -45,7 +45,7 @@ Modal = require(<span class="string">"./lib/modal"</span>)
 Palette = require <span class="string">"./palette"</span>
 RomReader = require <span class="string">"./rom_reader"</span>
 
-palette = Palette.default4Color<span class="comment">#Palette</span>
+palette = Palette.defaultPalette
 
 console.log palette
 
@@ -68,6 +68,8 @@ view = <span class="literal">null</span>
       [<span class="number">0.</span>.<span class="number">.8</span>].forEach (col) -&gt;
         index = view[chunk * chunkSize + row * <span class="number">8</span> + col]
 
+        <span class="keyword">debugger</span> <span class="keyword">if</span> index &gt; <span class="number">16</span>
+
         x = chunkSize * (chunk % <span class="number">10</span>)
         y = chunkSize * (chunk / <span class="number">10</span>).floor()
 
@@ -82,7 +84,7 @@ $ -&gt;
   Modal.show FileReading.binaryReaderInput
     success: (buffer) -&gt;
       <span class="comment"># Currently return only 1st bank</span>
-      global.view = view = Bitplane.toPaletteIndices(RomReader(buffer).bank(<span class="number">0</span>))
+      global.view = view = Bitplane.toPaletteIndices(RomReader(buffer).bank(<span class="number">0</span>), <span class="string">"4BPP SNES"</span>)
 
       toCanvas(view, palette)
 
