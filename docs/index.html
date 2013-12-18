@@ -37,6 +37,7 @@
             </div>
             <div class="content"><pre><code class="lang-coffeescript">require <span class="string">"./setup"</span>
 
+Bitplane = require <span class="string">"./bitplane"</span>
 ByteArray = require <span class="string">"byte_array"</span>
 Canvas = require <span class="string">"touch-canvas"</span>
 FileReading = require(<span class="string">"./lib/file_reading"</span>)
@@ -67,8 +68,6 @@ canvas = Canvas
   height: <span class="number">480</span>
 
 canvas.fill <span class="string">"red"</span>
-
-<span class="comment"># $("body").append canvas.element()</span>
 
 hex = $ <span class="string">"&lt;pre&gt;"</span>
 

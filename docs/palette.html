@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>rom_reader</title>
+  <title>palette</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
@@ -18,7 +18,7 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="rom-reader">Rom Reader</h1>
+              <h1 id="palette">Palette</h1>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -32,37 +32,36 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Read rom data by byte.</p>
+              <p>Some test palettes.</p>
 
             </div>
-            <div class="content"><pre><code class="lang-coffeescript"><span class="comment"># TODO: Handle both HiROM and LoROM</span>
-bankSize = <span class="number">1024</span> * <span class="number">30</span> <span class="comment"># 32kb</span></code></pre>
-</div>
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              <div class="pilwrap">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <p>Strip extra headers.</p>
+            <div class="content"><pre><code class="lang-coffeescript">default4Color = <span class="string">"""
+  20 12 28
+  89 125 206
+  109 170 44
+  222 238 214
+"""</span>
 
-            </div>
-            <div class="content"><pre><code class="lang-coffeescript">module.<span class="function"><span class="title">exports</span></span> = (buffer) -&gt;
-  view = <span class="keyword">new</span> Uint8Array(buffer)
-
-  remainder = view.length % <span class="number">1024</span>
-
-  <span class="keyword">if</span> remainder <span class="keyword">is</span> <span class="number">512</span>
-    rom = view.subarray(<span class="number">512</span>)
-  <span class="keyword">else</span> <span class="keyword">if</span> remainder <span class="keyword">is</span> <span class="number">0</span>
-    rom = view.subarray(<span class="number">0</span>)
-  <span class="keyword">else</span>
-    <span class="keyword">throw</span> <span class="string">"Invalid ROM length"</span>
-
-  bank: (n) -&gt;
-    rom.subarray(bankSize * n, bankSize * (n + <span class="number">1</span>))</code></pre>
+defaultPalette = <span class="string">"""
+  20 12 28
+  68 36 52
+  48 52 109
+  78 74 78
+  133 76 48
+  52 101 36
+  208 70 72
+  117 113 97
+  89 125 206
+  210 125 44
+  133 149 161
+  109 170 44
+  210 170 153
+  109 194 202
+  218 212 94
+  222 238 214
+"""</span>.split(<span class="string">"\n"</span>).map (row) -&gt;
+  row.split(<span class="string">" "</span>).map (n) -&gt;
+    parseInt(n, <span class="number">10</span>).concat <span class="number">0xff</span></code></pre>
 </div>
         </li>
         
