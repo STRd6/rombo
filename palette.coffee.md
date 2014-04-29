@@ -25,6 +25,17 @@ Some test palettes.
         222 238 214
       """
 
+      "15-bit RGB": (word) ->
+        R = 0b0000000000011111
+        G = 0b0000001111100000
+        B = 0b0111110000000000
+
+        r = word & R
+        g = (word & G) >> 5
+        b = (word & B) >> 10
+
+        "rgb(#{r}, #{g}, #{b})"
+
       defaultPalette: makeHexColors """
         20 12 28
         68 36 52

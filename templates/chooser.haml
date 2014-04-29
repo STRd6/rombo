@@ -3,4 +3,9 @@
     - on "change", @viewMode
     - each @keys, (key) ->
       %option= key
-  .bank= @bank
+  .banks
+    %button Prev
+      - on "click", @prevBank
+    %span.bank= @bank
+    %button Next
+      - on "click", @nextBank

@@ -4,7 +4,7 @@ Rom Reader
 Read rom data by byte.
 
     # TODO: Handle both HiROM and LoROM
-    bankSize = 1024 * 30 # 32kb
+    bankSize = 1024 * 32 # 32kb
 
 Strip extra headers.
 

@@ -19,14 +19,14 @@ http://mrclick.zophar.net/TilEd/download/consolegfx.txt
 
       # 16 bytes of source -> 64 bytes of dest
       "2BPP SNES": (source, dest, shift=0) ->
-        console.log shift
         [0...8].forEach (row) ->
           [0...2].forEach (depth) ->
             masks.forEach (mask, i) ->
               dest[row * 8 + i] |= ((source[2 * row + depth] & mask) >> i) << (depth + shift)
 
       # 24 bytes source -> 64 bytes dest
-      "3BPP SNES": -> # TODO
+      # "3BPP SNES": -> # TODO
+      #    modes["2BPP SNES"](source.subarray(0, 16), dest)
 
       # 32 bytes source -> 64 bytes dest
       "4BPP SNES": (source, dest, shift=0) ->
@@ -38,12 +38,19 @@ http://mrclick.zophar.net/TilEd/download/consolegfx.txt
         [0...2].forEach (shift) ->
           modes["4BPP SNES"](source.subarray(shift * 32, (shift + 1) * 32), dest, shift * 4)
 
+      "Mode 7 SNES": (source, dest) ->
+        i = 0
+        while i < dest.length
+          dest[i] = source[i]
+          i += 1
+
     module.exports =
       modes: Object.keys modes
       toPaletteIndices: (view, mode="2BPP SNES") ->
-        # TODO: Create correct output buffer based on mode and input size
 
-        chunkSize = parseInt(mode[0]) * 8
+        # TODO: May need to make a table for bit depth of all the modes
+        # currently just using the first character as a number or defaulting to 8
+        chunkSize = (parseInt(mode[0]) or 8) * 8
         outputChunkSize = 64
         ratio = outputChunkSize / chunkSize
 

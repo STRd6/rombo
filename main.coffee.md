@@ -31,7 +31,6 @@ Explore binary data.
       chunkSize = pixelSize * 8
 
       [0...(view.length / chunkSize)].forEach (chunk) ->
-        console.log "drawing chunk #{chunk}"
         [0...8].forEach (row) ->
           [0...8].forEach (col) ->
             index = view[chunk * chunkSize + row * 8 + col]
@@ -65,6 +64,10 @@ Explore binary data.
       buffer: Observable null
       keys: Bitplane.modes
       viewMode: Observable Bitplane.modes[0]
+      prevBank: ->
+        Rom.bank Math.max Rom.bank() - 1, 0
+      nextBank: ->
+        Rom.bank Rom.bank() + 1
 
     Rom.view = Observable ->
       bank = Rom.bank()
