@@ -2,12 +2,12 @@ version: "0.1.0"
 width: 780
 height: 800
 remoteDependencies: [
-  "https://code.jquery.com/jquery-1.10.1.min.js"
+  "https://code.jquery.com/jquery-1.11.0.min.js"
   "https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"
   "https://pixipaint.net/envweb-v0.4.7.js"
 ]
 dependencies:
   appcache: "distri/appcache:v0.2.0"
   byte_array: "distri/byte_array:v0.1.1"
-  runtime: "STRd6/runtime:v0.2.0"
+  runtime: "distri/runtime:v0.3.0"
   "touch-canvas": "distri/touch-canvas:v0.3.0"

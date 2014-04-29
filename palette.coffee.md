@@ -24,7 +24,7 @@ Some test palettes.
         109 170 44
         222 238 214
       """
-  
+
       defaultPalette: makeHexColors """
         20 12 28
         68 36 52

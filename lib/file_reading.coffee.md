@@ -32,7 +32,7 @@ Create an input to read a file as a binary array.
             success evt.target.result
             complete?()
 
-          reader.onerror = (evt) -> 
+          reader.onerror = (evt) ->
             error evt
             complete?()
 

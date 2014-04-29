@@ -22,5 +22,4 @@ Strip extra headers.
 
       bank: (n) ->
         rom.subarray(bankSize * n, bankSize * (n + 1))
-      
-      
+

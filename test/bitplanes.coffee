@@ -3,7 +3,7 @@ Bitplane = require "../bitplane"
 describe "Bitplane", ->
   it "should convert 2BPP SNES", ->
     source = new Uint8Array(16)
-    
+
     source[0] = 0xff
     source[1] = 0b1
 

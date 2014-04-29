@@ -4,14 +4,13 @@ Modal
 Messing around with some modal BS
 
     # HACK: Dismiss modal by clicking on overlay
-    $ ->
-      $ "<div>",
-        id: "modal"
-      .appendTo "body"
+    $ "<div>",
+      id: "modal"
+    .appendTo "body"
 
-      $("#modal").click (e) ->
-        if e.target is this
-          Modal.hide()
+    $("#modal").click (e) ->
+      if e.target is this
+        Modal.hide()
 
     module.exports = Modal =
       show: (element) ->

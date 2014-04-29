@@ -12,9 +12,9 @@ Explore binary data.
     Modal = require("./lib/modal")
     Palette = require "./palette"
     RomReader = require "./rom_reader"
-    
+
     palette = Palette.defaultPalette
-    
+
     console.log palette
 
     view = null
@@ -35,7 +35,7 @@ Explore binary data.
         [0...8].forEach (row) ->
           [0...8].forEach (col) ->
             index = view[chunk * chunkSize + row * 8 + col]
-            
+
             debugger if index > 16
 
             x = chunkSize * (chunk % 10)
@@ -48,18 +48,6 @@ Explore binary data.
               height: pixelSize
               color: palette[index]
 
-    $ ->
-      Modal.show FileReading.binaryReaderInput
-        success: (buffer) ->
-          # Currently return only 1st bank
-          global.view = view = Bitplane.toPaletteIndices(RomReader(buffer).bank(0), "4BPP SNES")
-
-          toCanvas(view, palette)
-
-        error: (evt) ->
-          console.log evt
-        complete: ->
-          Modal.hide()
 
     canvas = Canvas
       width: 640
@@ -71,3 +59,15 @@ Explore binary data.
     #$("body").append hex
 
     $("body").append canvas.element()
+
+    Modal.show FileReading.binaryReaderInput
+      success: (buffer) ->
+        # Currently return only 1st bank
+        global.view = view = Bitplane.toPaletteIndices(RomReader(buffer).bank(0), "4BPP SNES")
+
+        toCanvas(view, palette)
+
+      error: (evt) ->
+        console.log evt
+      complete: ->
+        Modal.hide()
