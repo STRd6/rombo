@@ -69,7 +69,8 @@ modes =
     [<span class="number">0.</span>.<span class="number">.2</span>].forEach (shift) -&gt;
       modes[<span class="string">"4BPP SNES"</span>](source.subarray(shift * <span class="number">32</span>, (shift + <span class="number">1</span>) * <span class="number">32</span>), dest, shift * <span class="number">4</span>)
 
-module.exports = 
+module.exports =
+  modes: Object.keys modes
   toPaletteIndices: (view, mode=<span class="string">"2BPP SNES"</span>) -&gt;
     <span class="comment"># TODO: Create correct output buffer based on mode and input size</span>
 

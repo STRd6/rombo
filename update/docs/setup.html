@@ -39,6 +39,8 @@
 global.PACKAGE = PACKAGE
 global.require = require
 
+global.Observable = require <span class="string">"observable"</span>
+
 runtime = require(<span class="string">"runtime"</span>)(PACKAGE)
 runtime.boot()
 runtime.applyStyleSheet(require(<span class="string">'./style'</span>))
