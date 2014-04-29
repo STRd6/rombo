@@ -1,4 +1,6 @@
-%select
-  - on "change", @viewMode
-  - each @keys, (key) ->
-    %option= key
+.rombo
+  %select
+    - on "change", @viewMode
+    - each @keys, (key) ->
+      %option= key
+  .bank= @bank

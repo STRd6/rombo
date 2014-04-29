@@ -63,6 +63,7 @@ Explore binary data.
     Rom =
       bank: Observable 0
       buffer: Observable null
+      keys: Bitplane.modes
       viewMode: Observable Bitplane.modes[0]
 
     Rom.view = Observable ->
@@ -78,9 +79,9 @@ Explore binary data.
     Rom.view.observe (newView) ->
       toCanvas newView, palette
 
-    $("body").append require("./templates/chooser")
-      keys: Bitplane.modes
-      viewMode: Rom.viewMode
+    template = require("./templates/chooser")
+    view = template(Rom)
+    $("body").append view
 
     Modal.show FileReading.binaryReaderInput
       success: (buffer) ->
