@@ -95,6 +95,7 @@ $(<span class="string">"body"</span>).append canvas.element()
 Rom =
   bank: Observable <span class="number">0</span>
   buffer: Observable <span class="literal">null</span>
+  keys: Bitplane.modes
   viewMode: Observable Bitplane.modes[<span class="number">0</span>]
 
 Rom.view = Observable -&gt;
@@ -110,9 +111,9 @@ Rom.view = Observable -&gt;
 Rom.view.observe (newView) -&gt;
   toCanvas newView, palette
 
-$(<span class="string">"body"</span>).append require(<span class="string">"./templates/chooser"</span>)
-  keys: Bitplane.modes
-  viewMode: Rom.viewMode
+template = require(<span class="string">"./templates/chooser"</span>)
+view = template(Rom)
+$(<span class="string">"body"</span>).append view
 
 Modal.show FileReading.binaryReaderInput
   success: (buffer) -&gt;
