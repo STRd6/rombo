@@ -1,0 +1,13 @@
+CACHE MANIFEST
+# 1398736628410
+
+CACHE:
+index.html
+https://code.jquery.com/jquery-1.11.0.min.js
+https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js
+https://pixipaint.net/envweb-v0.4.7.js
+
+NETWORK:
+https://*
+http://*
+*
