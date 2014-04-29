@@ -60,12 +60,31 @@ Explore binary data.
 
     $("body").append canvas.element()
 
+    Rom =
+      bank: Observable 0
+      buffer: Observable null
+      viewMode: Observable Bitplane.modes[0]
+
+    Rom.view = Observable ->
+      bank = Rom.bank()
+      mode = Rom.viewMode()
+      buffer = Rom.buffer()
+
+      if buffer
+        Bitplane.toPaletteIndices(RomReader(buffer).bank(bank), mode)
+      else
+        null
+
+    Rom.view.observe (newView) ->
+      toCanvas newView, palette
+
+    $("body").append require("./templates/chooser")
+      keys: Bitplane.modes
+      viewMode: Rom.viewMode
+
     Modal.show FileReading.binaryReaderInput
       success: (buffer) ->
-        # Currently return only 1st bank
-        global.view = view = Bitplane.toPaletteIndices(RomReader(buffer).bank(0), "4BPP SNES")
-
-        toCanvas(view, palette)
+        Rom.buffer buffer
 
       error: (evt) ->
         console.log evt

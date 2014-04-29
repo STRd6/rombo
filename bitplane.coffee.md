@@ -38,7 +38,8 @@ http://mrclick.zophar.net/TilEd/download/consolegfx.txt
         [0...2].forEach (shift) ->
           modes["4BPP SNES"](source.subarray(shift * 32, (shift + 1) * 32), dest, shift * 4)
 
-    module.exports = 
+    module.exports =
+      modes: Object.keys modes
       toPaletteIndices: (view, mode="2BPP SNES") ->
         # TODO: Create correct output buffer based on mode and input size
 
