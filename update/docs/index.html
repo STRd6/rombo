@@ -63,7 +63,6 @@ view = <span class="literal">null</span>
   chunkSize = pixelSize * <span class="number">8</span>
 
   [<span class="number">0.</span>..(view.length / chunkSize)].forEach (chunk) -&gt;
-    console.log <span class="string">"drawing chunk <span class="subst">#{chunk}</span>"</span>
     [<span class="number">0.</span>.<span class="number">.8</span>].forEach (row) -&gt;
       [<span class="number">0.</span>.<span class="number">.8</span>].forEach (col) -&gt;
         index = view[chunk * chunkSize + row * <span class="number">8</span> + col]
@@ -97,6 +96,10 @@ Rom =
   buffer: Observable <span class="literal">null</span>
   keys: Bitplane.modes
   viewMode: Observable Bitplane.modes[<span class="number">0</span>]
+  prevBank: -&gt;
+    Rom.bank Math.max Rom.bank() - <span class="number">1</span>, <span class="number">0</span>
+  nextBank: -&gt;
+    Rom.bank Rom.bank() + <span class="number">1</span>
 
 Rom.view = Observable -&gt;
   bank = Rom.bank()

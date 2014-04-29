@@ -57,6 +57,17 @@ module.exports =
     222 238 214
   """</span>
 
+  <span class="string">"15-bit RGB"</span>: (word) -&gt;
+    R = <span class="number">0b0000000000011111</span>
+    G = <span class="number">0b0000001111100000</span>
+    B = <span class="number">0b0111110000000000</span>
+
+    r = word &amp; R
+    g = (word &amp; G) &gt;&gt; <span class="number">5</span>
+    b = (word &amp; B) &gt;&gt; <span class="number">10</span>
+
+    <span class="string">"rgb(<span class="subst">#{r}</span>, <span class="subst">#{g}</span>, <span class="subst">#{b}</span>)"</span>
+
   defaultPalette: makeHexColors <span class="string">"""
     20 12 28
     68 36 52

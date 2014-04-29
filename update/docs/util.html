@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>bitplane</title>
+  <title>util</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
@@ -18,7 +18,7 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="bitplane">Bitplane</h1>
+              <h1 id="util">Util</h1>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -32,73 +32,33 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Transform a buffer of binary octects into an image data.</p>
-<p><a href="http://mrclick.zophar.net/TilEd/download/consolegfx.txt">http://mrclick.zophar.net/TilEd/download/consolegfx.txt</a></p>
-
+              
             </div>
-            <div class="content"><pre><code class="lang-coffeescript">masks = [<span class="number">0.</span>.<span class="number">.8</span>].map (n) -&gt;
-  <span class="number">0b1</span> &lt;&lt; n
-
-modes =
-  <span class="comment"># 16 bytes of source -&gt; 64 bytes of dest</span>
-  <span class="comment"># TODO: Test and debug all these</span>
-  <span class="string">"2BPP NES"</span>: (source, dest) -&gt;
-    [<span class="number">0.</span>.<span class="number">.2</span>].forEach (depth) -&gt;
-      [<span class="number">0.</span>.<span class="number">.8</span>].forEach (n) -&gt;
-        masks.forEach (mask, i) -&gt;
-          dest[n * <span class="number">8</span> + i] |= ((source[depth * <span class="number">8</span> + n] &amp; mask) &gt;&gt; i) &lt;&lt; depth
-
-  <span class="comment"># 16 bytes of source -&gt; 64 bytes of dest</span>
-  <span class="string">"2BPP SNES"</span>: (source, dest, shift=<span class="number">0</span>) -&gt;
-    [<span class="number">0.</span>.<span class="number">.8</span>].forEach (row) -&gt;
-      [<span class="number">0.</span>.<span class="number">.2</span>].forEach (depth) -&gt;
-        masks.forEach (mask, i) -&gt;
-          dest[row * <span class="number">8</span> + i] |= ((source[<span class="number">2</span> * row + depth] &amp; mask) &gt;&gt; i) &lt;&lt; (depth + shift)
-
-  <span class="comment"># 24 bytes source -&gt; 64 bytes dest</span>
-  <span class="comment"># "3BPP SNES": -&gt; # TODO</span>
-  <span class="comment">#    modes["2BPP SNES"](source.subarray(0, 16), dest)</span>
-
-  <span class="comment"># 32 bytes source -&gt; 64 bytes dest</span>
-  <span class="string">"4BPP SNES"</span>: (source, dest, shift=<span class="number">0</span>) -&gt;
-    [<span class="number">0.</span>.<span class="number">.2</span>].forEach (depth) -&gt;
-      modes[<span class="string">"2BPP SNES"</span>](source.subarray(depth * <span class="number">16</span>, (depth + <span class="number">1</span>) * <span class="number">16</span>), dest, depth * <span class="number">2</span> + shift)
-
-  <span class="comment"># 64 bytes source -&gt; 64 bytes dest</span>
-  <span class="string">"8BPP SNES"</span>: (source, dest) -&gt;
-    [<span class="number">0.</span>.<span class="number">.2</span>].forEach (shift) -&gt;
-      modes[<span class="string">"4BPP SNES"</span>](source.subarray(shift * <span class="number">32</span>, (shift + <span class="number">1</span>) * <span class="number">32</span>), dest, shift * <span class="number">4</span>)
-
-  <span class="string">"Mode 7 SNES"</span>: (source, dest) -&gt;
+            <div class="content"><pre><code class="lang-coffeescript">module.exports
+  bufferTobase64: (buffer) -&gt;
+    binaryString = <span class="string">''</span>
+    bytes = <span class="keyword">new</span> Uint8Array(buffer)
+    length = bytes.byteLength
     i = <span class="number">0</span>
-    <span class="keyword">while</span> i &lt; dest.length
-      dest[i] = source[i]
+
+    <span class="keyword">while</span> i &lt; length
+      binary += String.fromCharCode bytes[i]
       i += <span class="number">1</span>
 
-module.exports =
-  modes: Object.keys modes
-  toPaletteIndices: (view, mode=<span class="string">"2BPP SNES"</span>) -&gt;
+    btoa binaryString
 
-    <span class="comment"># TODO: May need to make a table for bit depth of all the modes</span>
-    <span class="comment"># currently just using the first character as a number or defaulting to 8</span>
-    chunkSize = (parseInt(mode[<span class="number">0</span>]) <span class="keyword">or</span> <span class="number">8</span>) * <span class="number">8</span>
-    outputChunkSize = <span class="number">64</span>
-    ratio = outputChunkSize / chunkSize
+  base64ToArrayBuffer: (base64) -&gt;
+    binaryString = atob(base64)
+    length = binaryString.length
+    bytes = <span class="keyword">new</span> Uint8Array length
 
-    output = <span class="keyword">new</span> Uint8Array(view.length * ratio)
+    i = <span class="number">0</span>
+    <span class="keyword">while</span> i &lt; length
+      ascii = binaryString.charCodeAt(i)
+      bytes[i] = ascii
+      i += <span class="number">1</span>
 
-    <span class="keyword">unless</span> modes[mode]
-      <span class="keyword">throw</span> <span class="string">"Invalid mode <span class="subst">#{mode}</span>, try one of <span class="subst">#{Object.keys(modes).join(", ")}</span>"</span>
-
-    <span class="keyword">if</span> (view.length % chunkSize) != <span class="number">0</span>
-      <span class="keyword">throw</span> <span class="string">"Invalid buffer length, must be a multiple of <span class="subst">#{chunkSize}</span>"</span>
-
-    [<span class="number">0.</span>..(view.length / chunkSize)].forEach (slice) -&gt;
-      source = view.subarray(slice * chunkSize, (slice + <span class="number">1</span>) * chunkSize)
-      destination = output.subarray(slice * outputChunkSize, (slice + <span class="number">1</span>) * outputChunkSize)
-      modes[mode](source, destination)
-
-    <span class="keyword">return</span> output</code></pre>
+    bytes.buffer</code></pre>
 </div>
         </li>
         
