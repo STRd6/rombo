@@ -1,15 +1,15 @@
 Util
 ====
 
-    module.exports
-      bufferTobase64: (buffer) ->
+    module.exports =
+      arrayBufferToBase64: (buffer) ->
         binaryString = ''
         bytes = new Uint8Array(buffer)
         length = bytes.byteLength
         i = 0
 
         while i < length
-          binary += String.fromCharCode bytes[i]
+          binaryString += String.fromCharCode bytes[i]
           i += 1
 
         btoa binaryString

@@ -86,11 +86,16 @@ Explore binary data.
     view = template(Rom)
     $("body").append view
 
-    Modal.show FileReading.binaryReaderInput
-      success: (buffer) ->
-        Rom.buffer buffer
+    Util = require "./util"
+    if data = localStorage.data
+      Rom.buffer Util.base64ToArrayBuffer(data)
+    else
+      Modal.show FileReading.binaryReaderInput
+        success: (buffer) ->
+          localStorage.data = Util.arrayBufferToBase64(buffer)
+          Rom.buffer buffer
 
-      error: (evt) ->
-        console.log evt
-      complete: ->
-        Modal.hide()
+        error: (evt) ->
+          console.log evt
+        complete: ->
+          Modal.hide()
