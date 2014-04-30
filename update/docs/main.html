@@ -86,10 +86,10 @@ canvas = Canvas
 
 canvas.fill <span class="string">"black"</span>
 
-hex = $ <span class="string">"&lt;pre&gt;"</span>
-<span class="comment">#$("body").append hex</span>
-
 $(<span class="string">"body"</span>).append canvas.element()
+
+hex = $ <span class="string">"&lt;pre&gt;"</span>
+$(<span class="string">"body"</span>).append hex
 
 Rom =
   bank: Observable <span class="number">0</span>
@@ -101,18 +101,25 @@ Rom =
   nextBank: -&gt;
     Rom.bank Rom.bank() + <span class="number">1</span>
 
-Rom.view = Observable -&gt;
-  bank = Rom.bank()
-  mode = Rom.viewMode()
+Rom.data = Observable -&gt;
   buffer = Rom.buffer()
+  bank = Rom.bank()
 
   <span class="keyword">if</span> buffer
-    Bitplane.toPaletteIndices(RomReader(buffer).bank(bank), mode)
-  <span class="keyword">else</span>
-    <span class="literal">null</span>
+    RomReader(buffer).bank(bank)
+
+Rom.view = Observable -&gt;
+  mode = Rom.viewMode()
+  data = Rom.data()
+
+  <span class="keyword">if</span> data
+    Bitplane.toPaletteIndices(data, mode)
 
 Rom.view.observe (newView) -&gt;
   toCanvas newView, palette
+
+Rom.data.observe (data) -&gt;
+  toHex data
 
 template = require(<span class="string">"./templates/chooser"</span>)
 view = template(Rom)
