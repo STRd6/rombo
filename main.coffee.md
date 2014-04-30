@@ -54,10 +54,10 @@ Explore binary data.
 
     canvas.fill "black"
 
-    hex = $ "<pre>"
-    #$("body").append hex
-
     $("body").append canvas.element()
+
+    hex = $ "<pre>"
+    $("body").append hex
 
     Rom =
       bank: Observable 0
@@ -69,18 +69,25 @@ Explore binary data.
       nextBank: ->
         Rom.bank Rom.bank() + 1
 
-    Rom.view = Observable ->
-      bank = Rom.bank()
-      mode = Rom.viewMode()
+    Rom.data = Observable ->
       buffer = Rom.buffer()
+      bank = Rom.bank()
 
       if buffer
-        Bitplane.toPaletteIndices(RomReader(buffer).bank(bank), mode)
-      else
-        null
+        RomReader(buffer).bank(bank)
+
+    Rom.view = Observable ->
+      mode = Rom.viewMode()
+      data = Rom.data()
+
+      if data
+        Bitplane.toPaletteIndices(data, mode)
 
     Rom.view.observe (newView) ->
       toCanvas newView, palette
+
+    Rom.data.observe (data) ->
+      toHex data
 
     template = require("./templates/chooser")
     view = template(Rom)
