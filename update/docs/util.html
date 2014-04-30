@@ -34,15 +34,15 @@
               </div>
               
             </div>
-            <div class="content"><pre><code class="lang-coffeescript">module.exports
-  bufferTobase64: (buffer) -&gt;
+            <div class="content"><pre><code class="lang-coffeescript">module.exports =
+  arrayBufferToBase64: (buffer) -&gt;
     binaryString = <span class="string">''</span>
     bytes = <span class="keyword">new</span> Uint8Array(buffer)
     length = bytes.byteLength
     i = <span class="number">0</span>
 
     <span class="keyword">while</span> i &lt; length
-      binary += String.fromCharCode bytes[i]
+      binaryString += String.fromCharCode bytes[i]
       i += <span class="number">1</span>
 
     btoa binaryString
